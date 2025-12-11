@@ -1,28 +1,30 @@
 package com.example.joelsanchez_pokeapi
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.joelsanchez_pokeapi.ui.theme.JoelSanchez_PokeAPITheme
+import com.example.joelsanchez_pokeapi.databinding.MainActivityBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding : MainActivity
+    private var _binding : MainActivityBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
+        _binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // Evita memory leaks (fugas de memoria)
+        // Va limpiando memoria reservada que no se libera
+        // PROBLEMA -> Si no se borran, pueden agotar memoria en exceso
+        _binding = null
 
     }
 
