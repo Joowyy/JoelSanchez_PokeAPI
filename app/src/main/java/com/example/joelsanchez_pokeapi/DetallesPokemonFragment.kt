@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.joelsanchez_pokeapi.databinding.FragmentDetallesPokemonBinding
-import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 
 class DetallesPokemonFragment : Fragment() {
 
