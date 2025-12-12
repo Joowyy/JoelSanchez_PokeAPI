@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <!-- Colores Pokémon -->
+    <color name="pokemon_blue">#3B4CCA</color>
+    <color name="pokemon_red">#FF0000</color>
+    <color name="pokemon_yellow">#FFDE00</color>
+    <color name="pokemon_light_blue">#CC0000</color>
+
+    <!-- Gradiente alternativo -->
+    <color name="gradient_start">#FF6B6B</color>
+    <color name="gradient_mid">#4ECDC4</color>
+    <color name="gradient_end">#556270</color>
+
 </resources>

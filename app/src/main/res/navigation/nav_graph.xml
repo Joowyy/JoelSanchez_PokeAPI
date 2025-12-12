@@ -9,7 +9,14 @@
         android:id="@+id/pokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.PokemonFragment"
         android:label="fragment_pokemon"
-        tools:layout="@layout/fragment_pokemon" />
+        tools:layout="@layout/fragment_pokemon" >
+        <action
+            android:id="@+id/action_pokemonFragment_to_detallesPokemonFragment"
+            app:destination="@id/detallesPokemonFragment" />
+        <action
+            android:id="@+id/action_pokemonFragment_to_favoritesPokemonFragment"
+            app:destination="@id/favoritesPokemonFragment" />
+    </fragment>
     <fragment
         android:id="@+id/detallesPokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.DetallesPokemonFragment"

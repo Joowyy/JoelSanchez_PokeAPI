@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 
 class PokemonFragment : Fragment() {
@@ -28,6 +29,21 @@ class PokemonFragment : Fragment() {
 
         _binding = FragmentPokemonBinding.inflate(layoutInflater)
         return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnPrueba.setOnClickListener {
+            // Navegación CORRECTA usando Navigation Component
+            findNavController().navigate(R.id.detallesPokemonFragment)
+        }
+
+        binding.btnPruebaF.setOnClickListener {
+            // Navegación CORRECTA usando Navigation Component
+            findNavController().navigate(R.id.favoritesPokemonFragment)
+        }
 
     }
 
