@@ -7,6 +7,13 @@
     tools:context=".PokemonFragment"
     android:background="@drawable/fondo_togetic">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:listitem="@layout/viewholder_pokemon" />
+
     <Button
         android:id="@+id/btnPrueba"
         android:layout_width="wrap_content"
@@ -24,7 +31,6 @@
         android:text="FAVORITOS"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"/>
-
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
