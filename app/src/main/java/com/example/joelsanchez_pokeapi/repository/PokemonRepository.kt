@@ -11,7 +11,7 @@ class PokemonRepository {
 
     )
 
-    fun actualizarPokemon (pokemon : Pokemon?) {
+    fun actualizarPokemonREP (pokemon : Pokemon?) {
 
         // Recuperamos la posicion en la que se encuentra el pokemon cambiado.
         val posicion = listaPokemon.indexOf(pokemon)

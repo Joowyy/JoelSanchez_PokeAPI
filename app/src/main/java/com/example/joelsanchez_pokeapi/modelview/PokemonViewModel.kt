@@ -1,19 +1,35 @@
 package com.example.joelsanchez_pokeapi.modelview
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.joelsanchez_pokeapi.model.Pokemon
 import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 
-class PokemonViewModel {
+class PokemonViewModel : ViewModel() {
 
-    private lateinit var repository : PokemonRepository
-    private var pokemons = MutableLiveData<List<Pokemon>>()
+    private var repository : PokemonRepository = PokemonRepository()
+    var pokemons = MutableLiveData<List<Pokemon>>()
+    var pokemonSeleccionado = MutableLiveData<Pokemon>()
 
     // Obtenemos la lista de la clase Pokemon, y este lista MutableLiveData
     // Sera la que cambie los datos para luego devolverlos a la lista normal.
     fun obtenerPokemons () {
 
         pokemons.value = repository.getPokemons()
+
+    }
+
+    // Una vez se hayan realizado cambios, el primer actualizarPokemon llevara a este método
+    // Que una vez ejecutado, efectuará los cambios en el Repository
+    fun actualizarPokemonVIEW (pokemon : Pokemon) {
+
+        repository.actualizarPokemonREP(pokemon)
+
+    }
+
+    fun seleccionarPokemon (pokemon : Pokemon) {
+
+        pokemonSeleccionado.value = pokemon
 
     }
 

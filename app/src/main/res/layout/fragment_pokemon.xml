@@ -14,23 +14,4 @@
         android:padding="8dp"
         tools:listitem="@layout/viewholder_pokemon" />
 
-    <Button
-        android:id="@+id/btnPrueba"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="DETALLES"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"/>
-
-    <Button
-        android:id="@+id/btnPruebaF"
-        android:layout_marginTop="100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="FAVORITOS"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
