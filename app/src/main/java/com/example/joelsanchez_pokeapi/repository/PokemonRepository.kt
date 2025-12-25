@@ -21,6 +21,12 @@ class PokemonRepository {
 
     }
 
+    fun eliminarPokemon (pokemon : Pokemon?) {
+
+        listaPokemon.remove(pokemon)
+
+    }
+
     // Getter de Pokemons
     fun getPokemons() : MutableList<Pokemon> = listaPokemon
 
