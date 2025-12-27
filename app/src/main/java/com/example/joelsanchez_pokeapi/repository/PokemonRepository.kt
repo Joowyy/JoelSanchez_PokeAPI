@@ -7,7 +7,7 @@ class PokemonRepository {
 
     private val listaPokemon : MutableList<Pokemon> = mutableListOf(
 
-        Pokemon("Pikachu", R.drawable.pikachu, "Rata electrica", "Eléctrico", false)
+        Pokemon("Pikachu", R.drawable.pikachu, "Rata electrica", "Eléctrico", "", false)
 
     )
 

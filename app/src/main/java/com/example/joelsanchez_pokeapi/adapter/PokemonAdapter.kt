@@ -46,7 +46,8 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
 
         holder.binding.nombre.text = pokemon.nombre
         holder.binding.imagen.setImageResource(pokemon.imagen)
-        holder.binding.tipo.text = pokemon.tipo
+        holder.binding.tipo1.text = pokemon.tipo1
+        holder.binding.tipo2.text = pokemon.tipo2
 
         holder.itemView.setOnClickListener { v ->
 

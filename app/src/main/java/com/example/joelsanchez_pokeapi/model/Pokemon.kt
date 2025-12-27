@@ -8,14 +8,15 @@ class Pokemon (
     val nombre: String?,
     val imagen: Int,
     val descripcion: String?,
-    val tipo: String?,
+    val tipo1: String?,
+    val tipo2: String?,
     var favorito: Boolean = false
 
 ) : Serializable {
 
     override fun hashCode(): Int {
 
-        return Objects.hash(nombre, imagen, descripcion, tipo, favorito)
+        return Objects.hash(nombre, imagen, descripcion, tipo1, tipo2, favorito)
 
     }
 

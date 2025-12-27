@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -9,7 +10,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview_drawable">
 
         <ImageView
             android:id="@+id/icon_favorite"
@@ -17,6 +19,7 @@
             android:layout_height="28dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"
             android:src="@drawable/estrella_vacia"
             android:clickable="true"
             android:focusable="true" />
@@ -30,7 +33,7 @@
 
             <ImageView
                 android:id="@+id/imagen"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="40dp"
                 android:layout_width="120dp"
                 android:layout_height="120dp" />
 
@@ -38,18 +41,38 @@
                 android:id="@+id/nombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:textSize="18sp"
+                android:textColor="#661414"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tipo"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="50dp"
-                android:textSize="10sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tipo1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tipo2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
