@@ -8,7 +8,6 @@
     <fragment
         android:id="@+id/pokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.PokemonFragment"
-        android:label="fragment_pokemon"
         tools:layout="@layout/fragment_pokemon" >
         <action
             android:id="@+id/action_pokemonFragment_to_detallesPokemonFragment"
@@ -20,12 +19,10 @@
     <fragment
         android:id="@+id/detallesPokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.DetallesPokemonFragment"
-        android:label="fragment_detalles_pokemon"
         tools:layout="@layout/fragment_detalles_pokemon" />
     <fragment
         android:id="@+id/favoritesPokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.FavoritesPokemonFragment"
-        android:label="fragment_favorites_pokemon"
         tools:layout="@layout/fragment_favorites_pokemon" />
 
 </navigation>

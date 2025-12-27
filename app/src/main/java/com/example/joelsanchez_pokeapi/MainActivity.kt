@@ -2,6 +2,8 @@ package com.example.joelsanchez_pokeapi
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -39,11 +42,18 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(this, navController, appBarConfiguration)
 
+        // Click al icono de favoritos
+        binding.btnFavoritos.setOnClickListener {
+            navController.navigate(R.id.favoritesPokemonFragment)
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
+
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp()
+
     }
 
     //------------------------

@@ -35,6 +35,7 @@ class PokemonFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        // Inflamos el layout
         _binding = FragmentPokemonBinding.inflate(layoutInflater)
         return binding.root
 
@@ -43,10 +44,12 @@ class PokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Le damos el contenido/valor necesario a cada variable
         repository = PokemonRepository()
         viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
         adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
 
+        // Aplicamos el recyclerView indicando tipo de layout, el fragment y las columnas
         binding.recyclerView.apply {
 
             layoutManager = GridLayoutManager(requireContext(), 2)
@@ -54,6 +57,7 @@ class PokemonFragment : Fragment() {
 
         }
 
+        // Observamos los cambios de la lista
         viewModel.pokemons.observe(viewLifecycleOwner) { lista ->
 
             adapter.establecerLista(lista)
@@ -61,16 +65,6 @@ class PokemonFragment : Fragment() {
         }
 
         viewModel.obtenerPokemons()
-
-//        binding.btnPrueba.setOnClickListener {
-//            // Navegación CORRECTA usando Navigation Component
-//            findNavController().navigate(R.id.detallesPokemonFragment)
-//        }
-//
-//        binding.btnPruebaF.setOnClickListener {
-//            // Navegación CORRECTA usando Navigation Component
-//            findNavController().navigate(R.id.favoritesPokemonFragment)
-//        }
 
     }
 
