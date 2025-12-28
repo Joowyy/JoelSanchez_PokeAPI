@@ -20,4 +20,11 @@
     <color name="gradient_mid">#4ECDC4</color>
     <color name="gradient_end">#556270</color>
 
+    <color name="tipo_electrico">#F7D02C</color>
+    <color name="tipo_fuego">#EE8130</color>
+    <color name="tipo_agua">#6390F0</color>
+    <color name="tipo_planta">#7AC74C</color>
+    <color name="tipo_volador">#A98FF3</color>
+    <color name="tipo_normal">#A8A77A</color>
+
 </resources>
