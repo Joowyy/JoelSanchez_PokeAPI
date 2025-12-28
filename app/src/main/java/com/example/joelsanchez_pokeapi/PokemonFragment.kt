@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
@@ -66,6 +68,43 @@ class PokemonFragment : Fragment() {
 
         viewModel.obtenerPokemons()
 
+        eventoEliminarPoke(view)
+
+    }
+
+    private fun eventoEliminarPoke(view: View) {
+
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0, // No movemos elementos
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT // Deslizar izquierda/derecha
+        ) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                // No necesitamos movimiento (solo eliminar)
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                // 1. Posición del elemento deslizado
+                val position = viewHolder.bindingAdapterPosition
+
+                if (position != RecyclerView.NO_POSITION) {
+
+                    viewModel.eliminarPokemonVIEW(position)
+
+                }
+
+            }
+
+        }
+
+        // Asociar callback al RecyclerView
+        ItemTouchHelper(callback).attachToRecyclerView(binding.recyclerView)
     }
 
     //------------------------

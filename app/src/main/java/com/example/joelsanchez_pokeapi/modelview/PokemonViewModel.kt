@@ -27,6 +27,16 @@ class PokemonViewModel : ViewModel() {
 
     }
 
+    fun eliminarPokemonVIEW(position: Int) {
+        val listaActual = pokemons.value ?: return
+
+        if (position !in listaActual.indices) return
+
+        val eliminado = listaActual[position]
+        repository.eliminarPokemon(eliminado)
+        pokemons.value = repository.getPokemons()
+    }
+
     fun seleccionarPokemon (pokemon : Pokemon) {
 
         pokemonSeleccionado.value = pokemon
