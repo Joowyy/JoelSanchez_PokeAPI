@@ -6,4 +6,12 @@
     tools:context=".FavoritesPokemonFragment"
     android:background="@drawable/fondo_lapras">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:listitem="@layout/viewholder_pokemon"
+        android:clipToPadding="false"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

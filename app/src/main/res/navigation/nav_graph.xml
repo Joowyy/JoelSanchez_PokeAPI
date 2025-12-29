@@ -23,6 +23,10 @@
     <fragment
         android:id="@+id/favoritesPokemonFragment"
         android:name="com.example.joelsanchez_pokeapi.FavoritesPokemonFragment"
-        tools:layout="@layout/fragment_favorites_pokemon" />
+        tools:layout="@layout/fragment_favorites_pokemon" >
+        <action
+            android:id="@+id/action_favoritesPokemonFragment_to_detallesPokemonFragment"
+            app:destination="@id/detallesPokemonFragment" />
+    </fragment>
 
 </navigation>

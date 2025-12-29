@@ -5,12 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentFavoritesPokemonBinding
+import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
+import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 
 class FavoritesPokemonFragment : Fragment() {
 
     private var _binding : FragmentFavoritesPokemonBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter : PokemonAdapter
+    private lateinit var repository : PokemonRepository
+    private lateinit var viewModel : PokemonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +39,72 @@ class FavoritesPokemonFragment : Fragment() {
         _binding = FragmentFavoritesPokemonBinding.inflate(layoutInflater)
         return binding.root
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Le damos el contenido/valor necesario a cada variable
+        repository = PokemonRepository()
+        viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
+        adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
+
+        // Aplicamos el recyclerView indicando tipo de layout, el fragment y las columnas
+        binding.recyclerView.apply {
+
+            layoutManager = GridLayoutManager(requireContext(), 2)
+            adapter = this@FavoritesPokemonFragment.adapter
+
+        }
+
+        // Observamos los cambios de la lista
+        viewModel.pokemons.observe(viewLifecycleOwner) { lista ->
+
+            val listaFavoritos = lista.filter { it.favorito }
+
+            adapter.establecerLista(listaFavoritos)
+
+        }
+
+        viewModel.obtenerPokemons()
+
+        eventoEliminarPoke(view)
+
+    }
+
+    private fun eventoEliminarPoke(view: View) {
+
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0, // No movemos elementos
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT // Deslizar izquierda/derecha
+        ) {
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                // No necesitamos movimiento (solo eliminar)
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+                // 1. Posición del elemento deslizado
+                val position = viewHolder.bindingAdapterPosition
+
+                if (position != RecyclerView.NO_POSITION) {
+
+                    viewModel.eliminarPokemonVIEW(position)
+
+                }
+
+            }
+
+        }
+
+        // Asociar callback al RecyclerView
+        ItemTouchHelper(callback).attachToRecyclerView(binding.recyclerView)
     }
 
     //------------------------

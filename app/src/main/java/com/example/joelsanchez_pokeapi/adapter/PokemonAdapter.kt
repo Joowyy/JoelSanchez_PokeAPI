@@ -54,9 +54,12 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
             viewModel.seleccionarPokemon(pokemon)
 
             val navController = findNavController(v)
-            navController.navigate(R.id.action_pokemonFragment_to_detallesPokemonFragment)
+            navController.navigate(R.id.detallesPokemonFragment)
 
         }
+
+        cambiarIconoFAV(pokemon, holder)
+        holder.binding.iconFavorite.setOnClickListener { v ->  cambiarATTFav(pokemon, holder) }
 
     }
 
@@ -72,6 +75,42 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
     override fun getItemCount(): Int {
 
         return if (pokemons != null) pokemons!!.size else 0
+
+    }
+
+    private fun cambiarATTFav (pokemon : Pokemon, holder : PokemonViewHolder) {
+
+        // Mod. el atributo "favorito" de cada pokemon
+        if (pokemon.favorito) {
+
+            pokemon.camAtributoFavorito(false)
+
+        } else {
+
+            pokemon.camAtributoFavorito(true)
+
+        }
+
+        // Cambiamos la imagen de la estrella
+        cambiarIconoFAV(pokemon, holder)
+
+        // Y actualizamos el pokemon en su lista
+        viewModel.actualizarPokemonVIEW(pokemon)
+
+    }
+
+    private fun cambiarIconoFAV (pokemon : Pokemon, holder : PokemonViewHolder) {
+
+        // Segun como este el atributo favorito, mete una imagen u otra de la estrella
+        if (pokemon.favorito) {
+
+            holder.binding.iconFavorite.setImageResource(R.drawable.estrella_rellena)
+
+        } else {
+
+            holder.binding.iconFavorite.setImageResource(R.drawable.estrella_vacia)
+
+        }
 
     }
 
