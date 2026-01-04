@@ -43,4 +43,8 @@ class PokemonViewModel : ViewModel() {
 
     }
 
+    fun buscarAnimalPorNombre(texto: String) {
+        pokemons.setValue(repository.getPokemonsPorNombre(texto))
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.joelsanchez_pokeapi
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,9 @@ import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
 import com.example.joelsanchez_pokeapi.repository.PokemonRepository
+import android.widget.SearchView
+import android.widget.TextView
+import android.widget.ImageView
 
 class PokemonFragment : Fragment() {
 
@@ -51,6 +55,21 @@ class PokemonFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
         adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
 
+        // Abrimos el SearchView para empezar a filtrar el texto introducido
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            // Se ejecuta cuando el usuario pulsa intro (no nos interesa)
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            // Se ejecuta cada vez que el usuario escribe una letra
+            override fun onQueryTextChange(texto: String?): Boolean {
+                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                return true
+            }
+        })
+
         // Aplicamos el recyclerView indicando tipo de layout, el fragment y las columnas
         binding.recyclerView.apply {
 
@@ -69,6 +88,27 @@ class PokemonFragment : Fragment() {
         viewModel.obtenerPokemons()
 
         eventoEliminarPoke(view)
+
+        // configurar colores
+        binding.searchView.post {
+            val searchText = binding.searchView.findViewById<TextView>(
+                androidx.appcompat.R.id.search_src_text
+            )
+            searchText?.setTextColor(Color.BLACK)
+            searchText?.setHintTextColor(Color.DKGRAY)
+
+            binding.searchView.findViewById<ImageView>(
+                androidx.appcompat.R.id.search_mag_icon
+            )?.setColorFilter(Color.BLACK)
+
+            binding.searchView.findViewById<ImageView>(
+                androidx.appcompat.R.id.search_close_btn
+            )?.setColorFilter(Color.BLACK)
+
+            binding.searchView.findViewById<View>(
+                androidx.appcompat.R.id.search_plate
+            )?.setBackgroundColor(Color.LTGRAY)
+        }
 
     }
 
