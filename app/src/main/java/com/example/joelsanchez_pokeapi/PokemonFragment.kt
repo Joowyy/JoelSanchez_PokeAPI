@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
-import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.ImageView
@@ -24,7 +23,6 @@ class PokemonFragment : Fragment() {
     private var _binding : FragmentPokemonBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter : PokemonAdapter
-    private lateinit var repository : PokemonRepository
     private lateinit var viewModel : PokemonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +48,6 @@ class PokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Le damos el contenido/valor necesario a cada variable
-        repository = PokemonRepository()
         viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
         adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
 

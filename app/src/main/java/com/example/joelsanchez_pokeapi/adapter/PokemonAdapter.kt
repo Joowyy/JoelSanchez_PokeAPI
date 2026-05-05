@@ -5,8 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
-import androidx.compose.ui.layout.Layout
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.databinding.ViewholderPokemonBinding
@@ -40,7 +38,7 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
 
     }
 
-    override fun onBindViewHolder(@NonNull holder: PokemonViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
 
         val pokemon = pokemons!![position]
 
@@ -82,21 +80,10 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
 
     private fun cambiarATTFav (pokemon : Pokemon, holder : PokemonViewHolder) {
 
-        // Mod. el atributo "favorito" de cada pokemon
-        if (pokemon.favorito) {
+        pokemon.favorito = !pokemon.favorito
 
-            pokemon.camAtributoFavorito(false)
-
-        } else {
-
-            pokemon.camAtributoFavorito(true)
-
-        }
-
-        // Cambiamos la imagen de la estrella
         cambiarIconoFAV(pokemon, holder)
 
-        // Y actualizamos el pokemon en su lista
         viewModel.actualizarPokemonVIEW(pokemon)
 
     }
@@ -116,7 +103,7 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
 
     }
 
-    class PokemonViewHolder(@NonNull itemView : View) : RecyclerView.ViewHolder(itemView) {
+    class PokemonViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
         var binding : ViewholderPokemonBinding = ViewholderPokemonBinding.bind(itemView)
 
