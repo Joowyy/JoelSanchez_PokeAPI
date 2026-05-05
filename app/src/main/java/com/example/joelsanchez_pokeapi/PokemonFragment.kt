@@ -89,27 +89,6 @@ class PokemonFragment : Fragment() {
 
         eventoEliminarPoke(view)
 
-        // configurar colores
-        binding.searchView.post {
-            val searchText = binding.searchView.findViewById<TextView>(
-                androidx.appcompat.R.id.search_src_text
-            )
-            searchText?.setTextColor(Color.BLACK)
-            searchText?.setHintTextColor(Color.DKGRAY)
-
-            binding.searchView.findViewById<ImageView>(
-                androidx.appcompat.R.id.search_mag_icon
-            )?.setColorFilter(Color.BLACK)
-
-            binding.searchView.findViewById<ImageView>(
-                androidx.appcompat.R.id.search_close_btn
-            )?.setColorFilter(Color.BLACK)
-
-            binding.searchView.findViewById<View>(
-                androidx.appcompat.R.id.search_plate
-            )?.setBackgroundColor(Color.LTGRAY)
-        }
-
     }
 
     private fun eventoEliminarPoke(view: View) {

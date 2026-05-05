@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -65,6 +66,21 @@ class FavoritesPokemonFragment : Fragment() {
             adapter.establecerLista(listaFavoritos)
 
         }
+
+        // Abrimos el SearchView para empezar a filtrar el texto introducido
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            // Se ejecuta cuando el usuario pulsa intro (no nos interesa)
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            // Se ejecuta cada vez que el usuario escribe una letra
+            override fun onQueryTextChange(texto: String?): Boolean {
+                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                return true
+            }
+        })
 
         viewModel.obtenerPokemons()
 
