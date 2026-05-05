@@ -45,7 +45,7 @@ class PokemonRepository {
 
         for (a in listaPokemon) {
 
-            if (a.nombre?.lowercase()?.startsWith(texto) == true) {
+            if (a.nombre?.lowercase()?.contains(texto.lowercase().trim()) == true) {
 
                 resultado.add(a)
 
