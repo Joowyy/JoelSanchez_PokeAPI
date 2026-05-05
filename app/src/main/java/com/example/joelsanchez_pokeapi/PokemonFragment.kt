@@ -109,12 +109,11 @@ class PokemonFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                // 1. Posición del elemento deslizado
                 val position = viewHolder.bindingAdapterPosition
 
                 if (position != RecyclerView.NO_POSITION) {
 
-                    viewModel.eliminarPokemonVIEW(position)
+                    viewModel.eliminarPokemonVIEW(adapter.getPokemonEn(position))
 
                 }
 

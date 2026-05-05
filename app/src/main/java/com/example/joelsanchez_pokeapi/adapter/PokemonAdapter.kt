@@ -63,6 +63,8 @@ class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : 
 
     }
 
+    fun getPokemonEn(position: Int): Pokemon = pokemons[position]
+
     fun establecerLista (pokemons : List<Pokemon>?) {
 
         if (pokemons != null) {
