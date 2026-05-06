@@ -61,6 +61,13 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.9.5")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Glide (imágenes)
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
 }
