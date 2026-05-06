@@ -61,5 +61,6 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.9.5")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
 }
