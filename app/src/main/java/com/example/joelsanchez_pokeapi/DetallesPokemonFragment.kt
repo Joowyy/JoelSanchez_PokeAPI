@@ -42,12 +42,12 @@ class DetallesPokemonFragment : Fragment() {
             if (poke != null) {
 
                 Glide.with(this).load(poke.imagen).into(binding.imagen)
-                binding.nombre.text = poke.nombre
+                binding.nombre.text = poke.name
                 binding.tvAltura.text = "${poke.altura}m"
                 binding.tvPeso.text = "${poke.peso}kg"
 
-                val tipo1 = poke.tipos.getOrNull(0)
-                val tipo2 = poke.tipos.getOrNull(1)
+                val tipo1 = poke.types.getOrNull(0)
+                val tipo2 = poke.types.getOrNull(1)
 
                 if (tipo1 != null) {
                     configurarTipo(binding.tipo1, tipo1)
@@ -67,7 +67,7 @@ class DetallesPokemonFragment : Fragment() {
     }
 
     private fun configurarTipo(textView: TextView, tipo: PokemonType) {
-        textView.text = tipo.nombre.uppercase()
+        textView.text = tipo.nombreEs.uppercase()
         textView.setBackgroundResource(R.drawable.badge_tipos)
         textView.background.setTint(ContextCompat.getColor(textView.context, tipo.colorRes()))
     }

@@ -31,13 +31,13 @@ class PokemonAdapter(context: Context?, pokemons: List<Pokemon>, viewModel: Poke
         val pokemon = pokemons[position]
 
         Glide.with(holder.itemView.context).load(pokemon.imagen).into(holder.binding.imagen)
-        holder.binding.nombre.text = pokemon.nombre
+        holder.binding.nombre.text = pokemon.name
         holder.binding.tvNumero.text = "#${String.format("%03d", pokemon.id)}"
         holder.binding.tvAltura.text = "${pokemon.altura}m"
         holder.binding.tvPeso.text = "${pokemon.peso}kg"
 
-        val tipo1 = pokemon.tipos.getOrNull(0)
-        val tipo2 = pokemon.tipos.getOrNull(1)
+        val tipo1 = pokemon.types.getOrNull(0)
+        val tipo2 = pokemon.types.getOrNull(1)
 
         if (tipo1 != null) {
             configurarBadgeTipo(holder.binding.tipo1, tipo1)
@@ -69,7 +69,7 @@ class PokemonAdapter(context: Context?, pokemons: List<Pokemon>, viewModel: Poke
     override fun getItemCount(): Int = pokemons.size
 
     private fun configurarBadgeTipo(textView: TextView, tipo: PokemonType) {
-        textView.text = tipo.nombre.uppercase()
+        textView.text = tipo.nombreEs.uppercase()
         textView.setBackgroundResource(R.drawable.badge_tipos)
         textView.background.setTint(ContextCompat.getColor(textView.context, tipo.colorRes()))
     }

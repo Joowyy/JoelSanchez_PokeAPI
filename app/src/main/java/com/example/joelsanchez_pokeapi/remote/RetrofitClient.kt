@@ -1,4 +1,5 @@
-import com.example.joelsanchez_pokeapi.remote.PokemonApi
+package com.example.joelsanchez_pokeapi.remote
+
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -1,36 +1,62 @@
 package com.example.joelsanchez_pokeapi.repository
 
 import com.example.joelsanchez_pokeapi.model.Pokemon
-import com.example.joelsanchez_pokeapi.model.PokemonType
+import com.example.joelsanchez_pokeapi.model.PokemonListApi
+import com.example.joelsanchez_pokeapi.remote.Resource
+import com.example.joelsanchez_pokeapi.remote.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.concurrent.atomic.AtomicInteger
 
 class PokemonRepository {
 
-    private val listaPokemon: MutableList<Pokemon> = mutableListOf(
-        Pokemon(4,  "Charmander", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
-            listOf(PokemonType("Fuego")), 0.6f, 8.5f),
-        Pokemon(5,  "Charmeleon", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png",
-            listOf(PokemonType("Fuego")), 1.1f, 19.0f),
-        Pokemon(6,  "Charizard",  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
-            listOf(PokemonType("Fuego"), PokemonType("Volador")), 1.7f, 90.5f),
-        Pokemon(7,  "Squirtle",   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
-            listOf(PokemonType("Agua")), 0.5f, 9.0f),
-        Pokemon(8,  "Wartortle",  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png",
-            listOf(PokemonType("Agua")), 1.0f, 22.5f),
-        Pokemon(9,  "Blastoise",  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png",
-            listOf(PokemonType("Agua")), 1.6f, 85.5f),
-        Pokemon(1,  "Bulbasaur",  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
-            listOf(PokemonType("Planta"), PokemonType("Veneno")), 0.7f, 6.9f),
-        Pokemon(2,  "Ivysaur",    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png",
-            listOf(PokemonType("Planta"), PokemonType("Veneno")), 1.0f, 13.0f),
-        Pokemon(3,  "Venusaur",   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png",
-            listOf(PokemonType("Planta"), PokemonType("Veneno")), 2.0f, 100.0f),
-        Pokemon(25, "Pikachu",    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
-            listOf(PokemonType("Eléctrico")), 0.4f, 6.0f)
-    )
+    private val api = RetrofitClient.pokemonApi
+    private val listaPokemon: MutableList<Pokemon> = mutableListOf()
+
+    fun cargarPokemons(limit: Int, callback: (Resource<List<Pokemon>>) -> Unit) {
+        callback(Resource.loading())
+
+        api.getPokemons(limit).enqueue(object : Callback<PokemonListApi> {
+            override fun onResponse(call: Call<PokemonListApi>, response: Response<PokemonListApi>) {
+                val items = response.body()?.results
+                if (items.isNullOrEmpty()) {
+                    callback(Resource.error("Sin datos"))
+                    return
+                }
+
+                val resultados = mutableListOf<Pokemon>()
+                val pendientes = AtomicInteger(items.size)
+
+                items.forEach { item ->
+                    api.getPokemonByName(item.name).enqueue(object : Callback<Pokemon> {
+                        override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                            response.body()?.let { synchronized(resultados) { resultados.add(it) } }
+                            if (pendientes.decrementAndGet() == 0) entregarResultados(resultados, callback)
+                        }
+
+                        override fun onFailure(call: Call<Pokemon>, t: Throwable) {
+                            if (pendientes.decrementAndGet() == 0) entregarResultados(resultados, callback)
+                        }
+                    })
+                }
+            }
+
+            override fun onFailure(call: Call<PokemonListApi>, t: Throwable) {
+                callback(Resource.error("Error de red: ${t.message}"))
+            }
+        })
+    }
+
+    private fun entregarResultados(resultados: List<Pokemon>, callback: (Resource<List<Pokemon>>) -> Unit) {
+        listaPokemon.clear()
+        listaPokemon.addAll(resultados.sortedBy { it.id })
+        callback(Resource.success(listaPokemon))
+    }
 
     fun actualizarPokemonREP(pokemon: Pokemon?) {
         val posicion = listaPokemon.indexOf(pokemon)
-        listaPokemon[posicion] = pokemon!!
+        if (posicion >= 0) listaPokemon[posicion] = pokemon!!
     }
 
     fun eliminarPokemon(pokemon: Pokemon?) {
@@ -41,7 +67,16 @@ class PokemonRepository {
 
     fun getPokemonsPorNombre(texto: String): List<Pokemon> {
         return listaPokemon.filter {
-            it.nombre?.lowercase()?.contains(texto.lowercase().trim()) == true
+            it.name?.lowercase()?.contains(texto.lowercase().trim()) == true
+        }
+    }
+
+    fun getFavoritos(): List<Pokemon> = listaPokemon.filter { it.favorito }
+
+    fun getFavoritosPorNombre(texto: String): List<Pokemon> {
+        return if (texto.isBlank()) getFavoritos()
+        else listaPokemon.filter {
+            it.favorito && it.name?.lowercase()?.contains(texto.lowercase().trim()) == true
         }
     }
 }
