@@ -13,14 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentFavoritesPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
-import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 
 class FavoritesPokemonFragment : Fragment() {
 
     private var _binding : FragmentFavoritesPokemonBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter : PokemonAdapter
-    private lateinit var repository : PokemonRepository
     private lateinit var viewModel : PokemonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +43,6 @@ class FavoritesPokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Le damos el contenido/valor necesario a cada variable
-        repository = PokemonRepository()
         viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
         adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
 
@@ -58,12 +54,10 @@ class FavoritesPokemonFragment : Fragment() {
 
         }
 
-        // Observamos los cambios de la lista
-        viewModel.pokemons.observe(viewLifecycleOwner) { lista ->
+        // Observamos los cambios de la lista de favoritos (independiente del filtro de PokemonFragment)
+        viewModel.favoritosPokemons.observe(viewLifecycleOwner) { lista ->
 
-            val listaFavoritos = lista.filter { it.favorito }
-
-            adapter.establecerLista(listaFavoritos)
+            adapter.establecerLista(lista)
 
         }
 
@@ -77,12 +71,12 @@ class FavoritesPokemonFragment : Fragment() {
 
             // Se ejecuta cada vez que el usuario escribe una letra
             override fun onQueryTextChange(texto: String?): Boolean {
-                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                viewModel.buscarFavoritoPorNombre(texto.orEmpty())
                 return true
             }
         })
 
-        viewModel.obtenerPokemons()
+        viewModel.obtenerFavoritos()
 
         eventoEliminarPoke(view)
 
@@ -106,12 +100,11 @@ class FavoritesPokemonFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                // 1. Posición del elemento deslizado
                 val position = viewHolder.bindingAdapterPosition
 
                 if (position != RecyclerView.NO_POSITION) {
 
-                    viewModel.eliminarPokemonVIEW(position)
+                    viewModel.eliminarPokemonVIEW(adapter.getPokemonEn(position))
 
                 }
 

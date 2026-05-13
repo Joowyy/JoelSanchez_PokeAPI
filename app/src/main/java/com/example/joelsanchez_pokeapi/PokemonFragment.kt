@@ -1,30 +1,24 @@
 package com.example.joelsanchez_pokeapi
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
-import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 import android.widget.SearchView
-import android.widget.TextView
-import android.widget.ImageView
 
 class PokemonFragment : Fragment() {
 
     private var _binding : FragmentPokemonBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter : PokemonAdapter
-    private lateinit var repository : PokemonRepository
     private lateinit var viewModel : PokemonViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +44,6 @@ class PokemonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Le damos el contenido/valor necesario a cada variable
-        repository = PokemonRepository()
         viewModel = ViewModelProvider(requireActivity()).get(PokemonViewModel::class.java)
         adapter = PokemonAdapter(requireContext(), mutableListOf(), viewModel)
 
@@ -65,7 +57,7 @@ class PokemonFragment : Fragment() {
 
             // Se ejecuta cada vez que el usuario escribe una letra
             override fun onQueryTextChange(texto: String?): Boolean {
-                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                viewModel.buscarPokemonPorNombre(texto.orEmpty())
                 return true
             }
         })
@@ -109,12 +101,11 @@ class PokemonFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                // 1. Posición del elemento deslizado
                 val position = viewHolder.bindingAdapterPosition
 
                 if (position != RecyclerView.NO_POSITION) {
 
-                    viewModel.eliminarPokemonVIEW(position)
+                    viewModel.eliminarPokemonVIEW(adapter.getPokemonEn(position))
 
                 }
 

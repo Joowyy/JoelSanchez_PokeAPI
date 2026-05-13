@@ -1,29 +1,21 @@
 package com.example.joelsanchez_pokeapi.model
 
-import java.io.Serializable
-import java.util.Objects
+import com.google.gson.annotations.SerializedName
 
-class Pokemon (
-
-    val nombre: String?,
-    val imagen: Int,
-    val descripcion: String?,
-    val tipo1: String?,
-    val tipo2: String?,
+data class Pokemon(
+    val id: Int = 0,
+    val name: String? = null,
+    val sprites: Sprites? = null,
+    val types: List<PokemonType> = emptyList(),
+    val height: Int = 0,
+    val weight: Int = 0,
     var favorito: Boolean = false
+) {
+    val imagen: String? get() = sprites?.frontDefault
+    val altura: Int get() = height
+    val peso: Int get() = weight
 
-) : Serializable {
-
-    override fun hashCode(): Int {
-
-        return Objects.hash(nombre, imagen, descripcion, tipo1, tipo2, favorito)
-
-    }
-
-    fun camAtributoFavorito (favorito : Boolean) {
-
-        this.favorito = favorito
-
-    }
-
+    data class Sprites(
+        @SerializedName("front_default") val frontDefault: String?
+    )
 }
