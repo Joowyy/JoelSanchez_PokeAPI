@@ -4,10 +4,22 @@ import com.example.joelsanchez_pokeapi.R
 
 class PokemonType {
 
-    val type: TypeDetails? = null
+    var type: TypeDetails? = null
 
     class TypeDetails {
-        val name: String? = null
+        var name: String? = null
+
+        constructor()
+        constructor(nombre: String) {
+            name = nombre
+        }
+    }
+
+    constructor()
+
+    // Constructor con nombre → lo usamos nosotros al cargar desde Room
+    constructor(typeName: String) {
+        type = TypeDetails(typeName)
     }
 
     val nombreEs: String get() = when (type?.name?.lowercase()) {
