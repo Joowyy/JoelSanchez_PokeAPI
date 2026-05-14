@@ -1,112 +1,94 @@
 package com.example.joelsanchez_pokeapi.adapter
 
-import com.example.joelsanchez_pokeapi.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.joelsanchez_pokeapi.R
 import com.example.joelsanchez_pokeapi.databinding.ViewholderPokemonBinding
 import com.example.joelsanchez_pokeapi.model.Pokemon
+import com.example.joelsanchez_pokeapi.model.PokemonType
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
 
-class PokemonAdapter (context : Context?, pokemons : List<Pokemon>, viewModel : PokemonViewModel)
+class PokemonAdapter(context: Context?, pokemons: List<Pokemon>, viewModel: PokemonViewModel)
     : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder?>() {
 
-    private val inflater : LayoutInflater
-    private var viewModel : PokemonViewModel
-    private var pokemons : List<Pokemon>
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
+    private var viewModel: PokemonViewModel = viewModel
+    private var pokemons: List<Pokemon> = pokemons
 
-    // Inicializamos las variables con el constructor
-    init {
-
-        this.inflater = LayoutInflater.from(context)
-        this.viewModel = viewModel
-        this.pokemons = pokemons
-
-    }
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): PokemonViewHolder {
-
-        // Inflamos la vista de la CardView
-        val view : View = inflater.inflate(R.layout.viewholder_pokemon, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
+        val view: View = inflater.inflate(R.layout.viewholder_pokemon, parent, false)
         return PokemonViewHolder(view)
-
     }
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
+        val pokemon = pokemons[position]
 
-        val pokemon = pokemons!![position]
+        Glide.with(holder.itemView.context).load(pokemon.imagen).into(holder.binding.imagen)
+        holder.binding.nombre.text = pokemon.name
+        holder.binding.tvNumero.text = "#${String.format("%03d", pokemon.id)}"
+        holder.binding.tvAltura.text = "${pokemon.altura}m"
+        holder.binding.tvPeso.text = "${pokemon.peso}kg"
 
-        holder.binding.nombre.text = pokemon.nombre
-        holder.binding.imagen.setImageResource(pokemon.imagen)
-        holder.binding.tipo1.text = pokemon.tipo1
-        holder.binding.tipo2.text = pokemon.tipo2
+        val tipo1 = pokemon.types.getOrNull(0)
+        val tipo2 = pokemon.types.getOrNull(1)
+
+        if (tipo1 != null) {
+            configurarBadgeTipo(holder.binding.tipo1, tipo1)
+        }
+
+        if (tipo2 != null) {
+            holder.binding.tipo2.visibility = View.VISIBLE
+            configurarBadgeTipo(holder.binding.tipo2, tipo2)
+        } else {
+            holder.binding.tipo2.visibility = View.GONE
+        }
 
         holder.itemView.setOnClickListener { v ->
-
             viewModel.seleccionarPokemon(pokemon)
-
-            val navController = findNavController(v)
-            navController.navigate(R.id.detallesPokemonFragment)
-
+            findNavController(v).navigate(R.id.detallesPokemonFragment)
         }
 
         cambiarIconoFAV(pokemon, holder)
-        holder.binding.iconFavorite.setOnClickListener { v ->  cambiarATTFav(pokemon, holder) }
-
+        holder.binding.iconFavorite.setOnClickListener { cambiarATTFav(pokemon, holder) }
     }
 
     fun getPokemonEn(position: Int): Pokemon = pokemons[position]
 
-    fun establecerLista (pokemons : List<Pokemon>?) {
-
-        if (pokemons != null) {
-            this.pokemons = pokemons
-        }
+    fun establecerLista(pokemons: List<Pokemon>?) {
+        if (pokemons != null) this.pokemons = pokemons
         notifyDataSetChanged()
-
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int = pokemons.size
 
-        return if (pokemons != null) pokemons!!.size else 0
-
+    private fun configurarBadgeTipo(textView: TextView, tipo: PokemonType) {
+        textView.text = tipo.nombreEs.uppercase()
+        textView.setBackgroundResource(R.drawable.badge_tipos)
+        textView.background.setTint(ContextCompat.getColor(textView.context, tipo.colorRes()))
     }
 
-    private fun cambiarATTFav (pokemon : Pokemon, holder : PokemonViewHolder) {
-
+    private fun cambiarATTFav(pokemon: Pokemon, holder: PokemonViewHolder) {
         pokemon.favorito = !pokemon.favorito
-
         cambiarIconoFAV(pokemon, holder)
-
         viewModel.actualizarPokemonVIEW(pokemon)
-
     }
 
-    private fun cambiarIconoFAV (pokemon : Pokemon, holder : PokemonViewHolder) {
-
-        // Segun como este el atributo favorito, mete una imagen u otra de la estrella
+    private fun cambiarIconoFAV(pokemon: Pokemon, holder: PokemonViewHolder) {
         if (pokemon.favorito) {
-
             holder.binding.iconFavorite.setImageResource(R.drawable.estrella_rellena)
-
         } else {
-
             holder.binding.iconFavorite.setImageResource(R.drawable.estrella_vacia)
-
         }
-
     }
 
-    class PokemonViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-
-        var binding : ViewholderPokemonBinding = ViewholderPokemonBinding.bind(itemView)
-
+    class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var binding: ViewholderPokemonBinding = ViewholderPokemonBinding.bind(itemView)
     }
-
 }

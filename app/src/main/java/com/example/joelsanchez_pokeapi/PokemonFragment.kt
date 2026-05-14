@@ -1,13 +1,11 @@
 package com.example.joelsanchez_pokeapi
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -15,8 +13,6 @@ import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
 import android.widget.SearchView
-import android.widget.TextView
-import android.widget.ImageView
 
 class PokemonFragment : Fragment() {
 
@@ -61,7 +57,7 @@ class PokemonFragment : Fragment() {
 
             // Se ejecuta cada vez que el usuario escribe una letra
             override fun onQueryTextChange(texto: String?): Boolean {
-                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                viewModel.buscarPokemonPorNombre(texto.orEmpty())
                 return true
             }
         })

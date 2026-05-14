@@ -54,12 +54,10 @@ class FavoritesPokemonFragment : Fragment() {
 
         }
 
-        // Observamos los cambios de la lista
-        viewModel.pokemons.observe(viewLifecycleOwner) { lista ->
+        // Observamos los cambios de la lista de favoritos (independiente del filtro de PokemonFragment)
+        viewModel.favoritosPokemons.observe(viewLifecycleOwner) { lista ->
 
-            val listaFavoritos = lista.filter { it.favorito }
-
-            adapter.establecerLista(listaFavoritos)
+            adapter.establecerLista(lista)
 
         }
 
@@ -73,12 +71,12 @@ class FavoritesPokemonFragment : Fragment() {
 
             // Se ejecuta cada vez que el usuario escribe una letra
             override fun onQueryTextChange(texto: String?): Boolean {
-                viewModel.buscarAnimalPorNombre(texto.orEmpty())
+                viewModel.buscarFavoritoPorNombre(texto.orEmpty())
                 return true
             }
         })
 
-        viewModel.obtenerPokemons()
+        viewModel.obtenerFavoritos()
 
         eventoEliminarPoke(view)
 
