@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.joelsanchez_pokeapi.adapter.PokemonAdapter
 import com.example.joelsanchez_pokeapi.databinding.FragmentPokemonBinding
 import com.example.joelsanchez_pokeapi.modelview.PokemonViewModel
+import com.example.joelsanchez_pokeapi.remote.Resource
 import android.widget.SearchView
 
 class PokemonFragment : Fragment() {
@@ -75,6 +76,30 @@ class PokemonFragment : Fragment() {
 
             adapter.establecerLista(lista)
 
+        }
+
+        // Observamos el estado de carga (loading / success / error)
+        viewModel.estadoCarga.observe(viewLifecycleOwner) { resource ->
+            when (resource.status) {
+                Resource.Status.LOADING -> {
+                    binding.layoutCarga.visibility = View.VISIBLE
+                    binding.layoutError.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.progressBar.progress = resource.progress
+                    binding.tvProgreso.text = "${resource.progress}%"
+                }
+                Resource.Status.SUCCESS -> {
+                    binding.layoutCarga.visibility = View.GONE
+                    binding.layoutError.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
+                Resource.Status.ERROR -> {
+                    binding.layoutCarga.visibility = View.GONE
+                    binding.recyclerView.visibility = View.GONE
+                    binding.layoutError.visibility = View.VISIBLE
+                    binding.tvError.text = resource.message ?: "Error desconocido"
+                }
+            }
         }
 
         viewModel.obtenerPokemons()
