@@ -7,6 +7,20 @@
     tools:context=".DetallesPokemonFragment"
     android:background="@drawable/fondo_ursaring">
 
+    <!-- Marco circular decorativo -->
+    <ImageView
+        android:layout_width="276dp"
+        android:layout_height="243dp"
+        android:src="@drawable/img_detalles_pokemon"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.063" />
+
+    <!-- Imagen del Pokémon -->
     <ImageView
         android:id="@+id/imagen"
         android:layout_width="150dp"
@@ -21,85 +35,69 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.128" />
 
-    <ImageView
-        android:layout_width="276dp"
-        android:layout_height="243dp"
-        android:layout_gravity="center"
-        android:background="@null"
-        android:src="@drawable/img_detalles_pokemon"
-        android:translationZ="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
-
+    <!-- Nombre del Pokémon -->
     <TextView
         android:id="@+id/nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
-        android:textSize="40sp"
+        android:textSize="36sp"
         android:textColor="#CC0000"
         android:shadowColor="#FFFFFF"
         android:shadowDx="4"
         android:shadowDy="4"
         android:shadowRadius="8"
+        android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-black"
         android:letterSpacing="0.1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagen"
-        app:layout_constraintVertical_bias="0.131" />
-
-    <TextView
-        android:id="@+id/tipo2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre"
-        app:layout_constraintVertical_bias="0.318" />
-
-    <TextView
-        android:id="@+id/tipo1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre"
-        app:layout_constraintVertical_bias="0.318"
-        tools:layout_editor_absoluteX="205dp" />
-
-    <TextView
-        android:id="@+id/descripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/pokemon_red"
-        android:textSize="25sp"
         android:translationZ="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tipo1"
-        app:layout_constraintVertical_bias="0.564" />
+        app:layout_constraintTop_toBottomOf="@+id/imagen"
+        app:layout_constraintVertical_bias="0.05" />
 
+    <!-- Fila de tipos (chips coloreados) -->
+    <LinearLayout
+        android:id="@+id/tipos_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:translationZ="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre">
+
+        <TextView
+            android:id="@+id/tipo1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/badge_tipos" />
+
+        <TextView
+            android:id="@+id/tipo2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:background="@drawable/badge_tipos" />
+
+    </LinearLayout>
+
+    <!-- Fondo decorativo del panel de stats -->
     <ImageView
+        android:id="@+id/desc_box"
         android:layout_width="291dp"
         android:layout_height="111dp"
-        android:layout_gravity="center"
-        android:background="@null"
         android:src="@drawable/desc_detalles_pokemon"
         android:translationZ="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -107,5 +105,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.904" />
+
+    <!-- Stats: Altura y Peso (centrados sobre el panel) -->
+    <LinearLayout
+        android:id="@+id/stats_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:translationZ="2dp"
+        app:layout_constraintTop_toTopOf="@id/desc_box"
+        app:layout_constraintBottom_toBottomOf="@id/desc_box"
+        app:layout_constraintStart_toStartOf="@id/desc_box"
+        app:layout_constraintEnd_toEndOf="@id/desc_box">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ALTURA"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textStyle="bold"
+                android:letterSpacing="0.1" />
+
+            <TextView
+                android:id="@+id/tv_altura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="28dp"
+            android:background="#BBBBBB" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PESO"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textStyle="bold"
+                android:letterSpacing="0.1" />
+
+            <TextView
+                android:id="@+id/tv_peso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#333333" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
