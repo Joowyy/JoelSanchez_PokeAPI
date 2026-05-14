@@ -1,22 +1,39 @@
 package com.example.joelsanchez_pokeapi.repository
 
+import android.content.Context
+import com.example.joelsanchez_pokeapi.db.PokemonDatabase
+import com.example.joelsanchez_pokeapi.mapper.PokemonMapper
 import com.example.joelsanchez_pokeapi.model.Pokemon
 import com.example.joelsanchez_pokeapi.model.PokemonListApi
 import com.example.joelsanchez_pokeapi.remote.Resource
 import com.example.joelsanchez_pokeapi.remote.RetrofitClient
+import com.example.joelsanchez_pokeapi.utils.ConnectivityHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
-class PokemonRepository {
+class PokemonRepository(context: Context) {
 
     private val api = RetrofitClient.pokemonApi
+    private val dao = PokemonDatabase.getInstance(context).pokemonDao()
+    private val executor = Executors.newSingleThreadExecutor()
+    private val ctx = context.applicationContext
+
     private val listaPokemon: MutableList<Pokemon> = mutableListOf()
 
     fun cargarPokemons(limit: Int, callback: (Resource<List<Pokemon>>) -> Unit) {
         callback(Resource.loading())
 
+        if (ConnectivityHelper.tieneConexion(ctx)) {
+            cargarDesdeApi(limit, callback)
+        } else {
+            cargarDesdeRoom(callback)
+        }
+    }
+
+    private fun cargarDesdeApi(limit: Int, callback: (Resource<List<Pokemon>>) -> Unit) {
         api.getPokemons(limit).enqueue(object : Callback<PokemonListApi> {
             override fun onResponse(call: Call<PokemonListApi>, response: Response<PokemonListApi>) {
                 val items = response.body()?.results
@@ -43,33 +60,58 @@ class PokemonRepository {
             }
 
             override fun onFailure(call: Call<PokemonListApi>, t: Throwable) {
-                callback(Resource.error("Error de red: ${t.message}"))
+                // Sin conexión → intentar Room como fallback
+                cargarDesdeRoom(callback)
             }
         })
     }
 
+    private fun cargarDesdeRoom(callback: (Resource<List<Pokemon>>) -> Unit) {
+        executor.execute {
+            val entities = dao.getAllSync()
+            if (entities.isEmpty()) {
+                callback(Resource.error("Sin conexión y sin datos guardados"))
+            } else {
+                listaPokemon.clear()
+                listaPokemon.addAll(PokemonMapper.entityListToDomain(entities))
+                callback(Resource.success(listaPokemon))
+            }
+        }
+    }
+
     private fun entregarResultados(resultados: List<Pokemon>, callback: (Resource<List<Pokemon>>) -> Unit) {
-        listaPokemon.clear()
-        listaPokemon.addAll(resultados.sortedBy { it.id })
-        callback(Resource.success(listaPokemon))
+        val ordenados = resultados.sortedBy { it.id }
+        executor.execute {
+
+            // Preservar favoritos guardados en Room antes de sobrescribir
+            val favoritosIds = dao.getAllSync().filter { it.favorito }.map { it.id }.toSet()
+            ordenados.forEach { if (it.id in favoritosIds) it.favorito = true }
+
+            listaPokemon.clear()
+            listaPokemon.addAll(ordenados)
+            dao.insertAll(PokemonMapper.domainListToEntity(listaPokemon))
+            callback(Resource.success(listaPokemon))
+            
+        }
     }
 
     fun actualizarPokemonREP(pokemon: Pokemon?) {
-        val posicion = listaPokemon.indexOf(pokemon)
-        if (posicion >= 0) listaPokemon[posicion] = pokemon!!
+        val posicion = listaPokemon.indexOfFirst { it.id == pokemon?.id }
+        if (posicion >= 0) {
+            listaPokemon[posicion] = pokemon!!
+            executor.execute { dao.update(PokemonMapper.domainToEntity(pokemon)) }
+        }
     }
 
     fun eliminarPokemon(pokemon: Pokemon?) {
         listaPokemon.remove(pokemon)
+        pokemon?.let { executor.execute { dao.delete(PokemonMapper.domainToEntity(it)) } }
     }
 
     fun getPokemons(): MutableList<Pokemon> = listaPokemon
 
-    fun getPokemonsPorNombre(texto: String): List<Pokemon> {
-        return listaPokemon.filter {
-            it.name?.lowercase()?.contains(texto.lowercase().trim()) == true
-        }
-    }
+    fun getPokemonsPorNombre(texto: String): List<Pokemon> =
+        listaPokemon.filter { it.name?.lowercase()?.contains(texto.lowercase().trim()) == true }
 
     fun getFavoritos(): List<Pokemon> = listaPokemon.filter { it.favorito }
 

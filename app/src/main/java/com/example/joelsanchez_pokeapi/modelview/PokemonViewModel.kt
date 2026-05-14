@@ -1,14 +1,15 @@
 package com.example.joelsanchez_pokeapi.modelview
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.joelsanchez_pokeapi.model.Pokemon
 import com.example.joelsanchez_pokeapi.remote.Resource
 import com.example.joelsanchez_pokeapi.repository.PokemonRepository
 
-class PokemonViewModel : ViewModel() {
+class PokemonViewModel(app: Application) : AndroidViewModel(app) {
 
-    private val repository = PokemonRepository()
+    private val repository = PokemonRepository(app.applicationContext)
     val pokemons = MutableLiveData<List<Pokemon>>()
     val favoritosPokemons = MutableLiveData<List<Pokemon>>()
     val pokemonSeleccionado = MutableLiveData<Pokemon>()
