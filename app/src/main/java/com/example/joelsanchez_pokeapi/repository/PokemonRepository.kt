@@ -43,16 +43,20 @@ class PokemonRepository(context: Context) {
                 }
 
                 val resultados = mutableListOf<Pokemon>()
-                val pendientes = AtomicInteger(items.size)
+                val total = items.size
+                val completados = AtomicInteger(0)
+                val pendientes = AtomicInteger(total)
 
                 items.forEach { item ->
                     api.getPokemonByName(item.name).enqueue(object : Callback<Pokemon> {
                         override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                             response.body()?.let { synchronized(resultados) { resultados.add(it) } }
+                            callback(Resource.loading((completados.incrementAndGet() * 100) / total))
                             if (pendientes.decrementAndGet() == 0) entregarResultados(resultados, callback)
                         }
 
                         override fun onFailure(call: Call<Pokemon>, t: Throwable) {
+                            callback(Resource.loading((completados.incrementAndGet() * 100) / total))
                             if (pendientes.decrementAndGet() == 0) entregarResultados(resultados, callback)
                         }
                     })
